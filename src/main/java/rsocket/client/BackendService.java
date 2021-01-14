@@ -37,8 +37,10 @@ public class BackendService {
                 .transport(WebsocketClientTransport.create(httpClient, "/rsocket"));
 
          Flux.interval(Duration.ofSeconds(10))
+                 //.onBackpressureLatest()
                  .map(tick -> "Telemetry from " + id + " tick " + tick)
                  .as(flux -> requester.route("/backend/telemetry").data(flux).retrieveFlux(Void.class))
+                 .retry()
                  .subscribe();
     }
 
