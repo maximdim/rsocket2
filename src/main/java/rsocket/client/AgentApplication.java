@@ -10,7 +10,7 @@ public class AgentApplication {
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = new SpringApplicationBuilder().sources(AgentApplication.class).profiles("client").run(args);
         System.out.println("Started 1");
-        Thread.sleep(1000L);
+        Thread.sleep(30_000L);
         context.close();
         System.out.println("Stopped 1");
 
@@ -19,7 +19,7 @@ public class AgentApplication {
                 System.out.println("*** " + t.getName());
             });
 
-        Thread.sleep(100000L);
+        Thread.sleep(30_000L);
     }
 
 }

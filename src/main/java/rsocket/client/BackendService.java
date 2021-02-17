@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import io.rsocket.transport.netty.client.WebsocketClientTransport;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.util.retry.Retry;
 
@@ -31,6 +30,7 @@ public class BackendService {
     @PreDestroy
     public void destroy() {
         telemetrySubscriber.dispose();
+        requester.rsocketClient().dispose();
     }
 
     public BackendService(RSocketRequester.Builder builder, RSocketStrategies strategies) {
@@ -47,6 +47,7 @@ public class BackendService {
                 .transport(WebsocketClientTransport.create(httpClient, "/rsocket"));
 
         telemetrySubscriber = Flux.interval(Duration.ofSeconds(10))
+            .log()
             .onBackpressureDrop()
             .map(tick -> "Telemetry from " + id + " tick " + tick)
             .as(flux -> requester.route("/backend/telemetry").data(flux).retrieveFlux(Void.class))
