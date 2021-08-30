@@ -32,8 +32,9 @@ public class RSocketController {
     }
 
     @MessageMapping("/backend/telemetry")
-    public Mono<Void> telemetry(Flux<String> messages) {
-        return messages.doOnNext(message -> logger.info("Telemetry received: " + message)).then();
+    public Mono<Void> telemetry(String message) {
+        logger.info("Telemetry received: " + message);
+        return Mono.empty();
     }
 
 }
