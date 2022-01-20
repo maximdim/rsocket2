@@ -8,7 +8,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class AgentApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder().sources(AgentApplication.class).profiles("client").run(args);
+        new SpringApplicationBuilder()
+                .sources(AgentApplication.class, BackendController.class)
+                .profiles("client").run(args);
     }
 
     @Override

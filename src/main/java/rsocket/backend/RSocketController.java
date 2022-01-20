@@ -8,7 +8,6 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.messaging.rsocket.annotation.ConnectMapping;
 import org.springframework.stereotype.Controller;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -32,9 +31,10 @@ public class RSocketController {
     }
 
     @MessageMapping("/backend/telemetry")
-    public Mono<Void> telemetry(String message) {
+    public Mono<String> telemetry(String message, RSocketRequester requester) {
         logger.info("Telemetry received: " + message);
-        return Mono.empty();
+        // return requester.route("ping").data("test").retrieveMono(String.class);
+        return Mono.just("Ping " + message);
     }
 
 }
